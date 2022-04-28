@@ -1,15 +1,15 @@
 package ru.digitalhabbits.homework2;
 
+import org.junit.jupiter.api.Test;
+import ru.digitalhabbits.homework2.impl.AsyncFileLetterCounter;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.Map;
+
 import static com.google.common.io.Resources.getResource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
-
-import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.util.Map;
-
-import ru.digitalhabbits.homework2.impl.AsyncFileLetterCounter;
 
 public class E2ETests {
 
@@ -30,7 +30,14 @@ public class E2ETests {
         );
     }
 
+    //@SneakyThrows
     private File getFile(String name) {
-        return new File(getResource(name).getPath());
+        File file = null;
+        try {
+            file =new File(getResource(name).toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }
