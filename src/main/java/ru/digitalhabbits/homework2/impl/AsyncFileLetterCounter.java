@@ -9,9 +9,9 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-//todo Make your impl
 public class AsyncFileLetterCounter implements FileLetterCounter {
 
     private final FileReader fileReader = new FileReaderImpl();
@@ -23,26 +23,21 @@ public class AsyncFileLetterCounter implements FileLetterCounter {
                 .map(String::toLowerCase)
                 .map(s -> s.replaceAll("\\s", ""))
                 .map(s -> executor.submit(new LetterCounterImpl(s)))
-                .map(mapFuture -> {
-                    Map<Character, Long> result = null;
-                    try {
-                        result = mapFuture.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
-                    return result;
-                })
-                .map(map -> executor.submit(new FileLetterCounterImpl(map)))
-                .map(mapFuture -> {
-                    Map<Character, Long> result = null;
-                    try {
-                        result = mapFuture.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
-                    return result;
-                }).filter(Objects::nonNull)
+                .map(this::futureToMap)
+                .map(map -> executor.submit(new LetterCountMergerImpl(map)))
+                .map(this::futureToMap)
+                .filter(Objects::nonNull)
                 .flatMap(map -> map.entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1 = v2));
+    }
+
+    private Map<Character, Long> futureToMap(Future<Map<Character, Long>> future) {
+        Map<Character, Long> result = null;
+        try {
+            result = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
