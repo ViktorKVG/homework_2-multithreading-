@@ -48,7 +48,6 @@ public class E2ETests {
 
     static class MockFileReader implements FileReader {
         @Override
-
         public Stream<String> readLines(File file) {
             Stream<String> lineStream = null;
             try {

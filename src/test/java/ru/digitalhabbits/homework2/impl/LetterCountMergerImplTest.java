@@ -26,7 +26,6 @@ class LetterCountMergerImplTest {
         merger = new LetterCountMergerImpl(map2);
         Map<Character, Long> result = merger.call();
 
-        System.out.println(result);
 
         assertThat(result).containsOnly(
                 entry('a', 2L),
