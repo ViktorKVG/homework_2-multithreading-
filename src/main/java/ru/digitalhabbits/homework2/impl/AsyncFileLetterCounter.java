@@ -5,6 +5,7 @@ import ru.digitalhabbits.homework2.FileReader;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 //todo Make your impl
 public class AsyncFileLetterCounter implements FileLetterCounter {
+
     private final FileReader fileReader = new FileReaderImpl();
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -39,7 +41,7 @@ public class AsyncFileLetterCounter implements FileLetterCounter {
                         e.printStackTrace();
                     }
                     return result;
-                })
+                }).filter(Objects::nonNull)
                 .flatMap(map -> map.entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v1 = v2));
     }

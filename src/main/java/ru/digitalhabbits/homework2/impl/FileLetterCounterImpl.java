@@ -17,6 +17,6 @@ public class FileLetterCounterImpl implements Callable <Map<Character, Long>> {
     public Map<Character, Long> call() throws Exception {
         mapToAdd.forEach((key, value) ->
                 accumulator.merge(key, value, Long::sum));
-        return accumulator;
+        return new HashMap<>(accumulator);
     }
 }
