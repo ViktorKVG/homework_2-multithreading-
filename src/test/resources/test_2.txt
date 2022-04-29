@@ -1,0 +1,16 @@
+Test file
+containing digits
+93 5 221 4
+and
+empty rows
+
+
+and such symbols as
+,
+&
+$
+^
+><
++
+-
+*

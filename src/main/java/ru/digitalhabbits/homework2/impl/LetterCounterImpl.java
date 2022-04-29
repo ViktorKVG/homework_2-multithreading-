@@ -15,8 +15,13 @@ public class LetterCounterImpl implements LetterCounter {
 
     @Override
     public Map<Character, Long> call() {
-        List<Character> chars = Chars.asList(line.toCharArray());
-        return chars.stream().collect(HashMap::new, this::countLetters, HashMap::putAll);
+        List<Character> chars = Chars.asList(
+                line.replaceAll("\\s", "")
+                        .toCharArray());
+        return chars.stream()
+                .filter(Character::isLetter)
+                .map(Character::toLowerCase)
+                .collect(HashMap::new, this::countLetters, HashMap::putAll);
     }
 
     private void countLetters(Map<Character, Long> map, Character key) {

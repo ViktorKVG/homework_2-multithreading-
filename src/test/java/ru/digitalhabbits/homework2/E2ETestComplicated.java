@@ -15,26 +15,39 @@ import static com.google.common.io.Resources.getResource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 
-public class E2ETests {
+public class E2ETestComplicated {
 
     @Test
-    void async_file_letter_counting_should_return_predicted_count() {
-        var file = getFile("test.txt");
+    void async_file_letter_counting_should_count_only_letters() {
+        var file = getFile("test_2.txt");
         var counter = new AsyncFileLetterCounter(new MockFileReader(), Executors.newCachedThreadPool());
 
         Map<Character, Long> count = counter.count(file);
 
         assertThat(count).containsOnly(
-                entry('a', 2697L),
-                entry('b', 2683L),
-                entry('c', 2647L),
-                entry('d', 2613L),
-                entry('e', 2731L),
-                entry('f', 2629L)
+                entry('a', 4L),
+                entry('b', 1L),
+                entry('c', 2L),
+                entry('d', 3L),
+                entry('e', 3L),
+                entry('f', 1L),
+                entry('g', 2L),
+                entry('h', 1L),
+                entry('i', 5L),
+                entry('l', 2L),
+                entry('m', 2L),
+                entry('n', 5L),
+                entry('o', 3L),
+                entry('p', 1L),
+                entry('r', 1L),
+                entry('s', 7L),
+                entry('t', 5L),
+                entry('u', 1L),
+                entry('w', 1L),
+                entry('y', 2L)
         );
     }
 
-    //@SneakyThrows
     private File getFile(String name) {
         File file = null;
         try {
@@ -44,7 +57,6 @@ public class E2ETests {
         }
         return file;
     }
-
 
     static class MockFileReader implements FileReader {
         @Override
@@ -60,3 +72,4 @@ public class E2ETests {
         }
     }
 }
+
